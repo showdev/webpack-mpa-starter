@@ -7,14 +7,20 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin')
 
 const resolve = pathName => path.resolve(process.cwd(), pathName)
 
-const path = {
+const paths = {
   dist: resolve('dist'),
 }
 module.exports = {
   entry: './src/index.js',
   output: {
     filename: '[name].js',
-    path: path.dist,
+    path: paths.dist,
+  },
+  devServer: {
+    open: true,
+    overlay: true,
+    contentBase: paths.dist,
+    port: 3000,
   },
   module: {
     rules: [
@@ -31,14 +37,11 @@ module.exports = {
       },
       {
         test: /\.(html)$/,
-        include: [
-          resolve('src/index.html'),
-          resolve('src/views'),
-        ],
+        include: [resolve('src/index.html'), resolve('src/views')],
         use: [
           {
             loader: 'file-loader',
-            options: { name: '[name].[ext]', output: path.dist },
+            options: { name: '[name].[ext]', output: paths.dist },
           },
           'extract-loader',
           {
